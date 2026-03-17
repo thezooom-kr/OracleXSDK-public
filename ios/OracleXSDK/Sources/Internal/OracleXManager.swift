@@ -113,26 +113,13 @@ class OracleXManager {
             return
         }
 
+        // 모든 URL → 외부 브라우저(시스템 핸들러)로 처리
         DispatchQueue.main.async {
-            let scheme = url.scheme ?? ""
-
-            if scheme == "http" || scheme == "https" {
-                // SFSafariViewController (In-App Browser)
-                guard let vc = self.activeViewController else {
-                    Logger.e("Cannot open external URL: no active view controller")
-                    return
-                }
-                let safariVC = SFSafariViewController(url: url)
-                vc.present(safariVC, animated: true)
-                Logger.d("Opened external URL in SFSafariViewController: \(urlString)")
-            } else {
-                // itms-apps://, tel://, mailto://, custom schemes → system handler
-                UIApplication.shared.open(url, options: [:]) { success in
-                    if success {
-                        Logger.d("Opened scheme URL via system: \(urlString)")
-                    } else {
-                        Logger.w("Cannot handle URL: \(urlString)")
-                    }
+            UIApplication.shared.open(url, options: [:]) { success in
+                if success {
+                    Logger.d("Opened external URL via system browser: \(urlString)")
+                } else {
+                    Logger.w("Cannot handle URL: \(urlString)")
                 }
             }
         }

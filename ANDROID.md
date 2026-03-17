@@ -1,6 +1,6 @@
 # OracleX SDK — Android 연동 가이드
 
-**SDK 버전: v1.6.0** | 최소 지원: API 21 (Android 5.0)
+**SDK 버전: v1.6.1** | 최소 지원: API 21 (Android 5.0)
 
 ---
 
