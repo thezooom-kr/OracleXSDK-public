@@ -1,7 +1,7 @@
 import Foundation
 
 enum SdkConstants {
-    static let sdkVersion = "1.6.1"
+    static let sdkVersion = "1.6.3"
     static let platform = "IOS"
     static let bridgeName = "OracleXBridge"
     static let logTag = "OracleXSDK"

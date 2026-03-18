@@ -1,5 +1,4 @@
 import Foundation
-import SafariServices
 import UIKit
 
 class OracleXManager {
@@ -166,9 +165,11 @@ class OracleXManager {
             evaluateJs("onReceiveAppInstallStatus(false)")
             return
         }
-        let isInstalled = UIApplication.shared.canOpenURL(url)
-        Logger.d("App installed check '\(appInfo)': \(isInstalled)")
-        evaluateJs("onReceiveAppInstallStatus(\(isInstalled))")
+        // canOpenURL() 대신 open() 사용 — LSApplicationQueriesSchemes 등록 불필요
+        UIApplication.shared.open(url, options: [:]) { [weak self] success in
+            Logger.d("App installed check '\(appInfo)': \(success)")
+            self?.evaluateJs("onReceiveAppInstallStatus(\(success))")
+        }
     }
 
     private func evaluateJs(_ script: String) {
