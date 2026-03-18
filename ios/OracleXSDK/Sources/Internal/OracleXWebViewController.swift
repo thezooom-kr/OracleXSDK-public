@@ -15,7 +15,6 @@ class OracleXWebViewController: UIViewController {
 
         setupWebView()
         setupActivityIndicator()
-        setupCloseButton()
 
         guard NetworkUtil.isNetworkAvailable else {
             Logger.e(ErrorCode.networkNotAvailable.defaultMessage)
@@ -75,34 +74,6 @@ class OracleXWebViewController: UIViewController {
         ])
 
         activityIndicator.startAnimating()
-    }
-
-    private func setupCloseButton() {
-        let closeButton = UIButton(type: .system)
-        closeButton.setImage(UIImage(systemName: "xmark"), for: .normal)
-        closeButton.tintColor = .darkGray
-        closeButton.translatesAutoresizingMaskIntoConstraints = false
-        closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
-
-        view.addSubview(closeButton)
-        NSLayoutConstraint.activate([
-            closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
-            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            closeButton.widthAnchor.constraint(equalToConstant: 32),
-            closeButton.heightAnchor.constraint(equalToConstant: 32)
-        ])
-    }
-
-    @objc private func closeButtonTapped() {
-        if OracleXManager.shared.isModalOpen {
-            OracleXManager.shared.campaignModalClose()
-        } else if OracleXManager.shared.isDrawerOpen {
-            OracleXManager.shared.campaignDrawerClose()
-        } else if OracleXManager.shared.isCommonPageOpen {
-            OracleXManager.shared.commonPageClose()
-        } else {
-            dismiss(animated: true)
-        }
     }
 
     deinit {

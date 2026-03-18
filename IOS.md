@@ -1,6 +1,6 @@
 # OracleX SDK — iOS 연동 가이드
 
-**SDK 버전: v1.6.3** | 최소 지원: iOS 13.0
+**SDK 버전: v1.6.4** | 최소 지원: iOS 13.0
 
 ---
 
@@ -8,7 +8,7 @@
 
 1. Xcode → **File → Add Package Dependencies**
 2. URL 입력: `https://github.com/thezooom-OracleX/OracleXSDK-public`
-3. Version: `v1.6.3`
+3. Version: `v1.6.4`
 
 ---
 
