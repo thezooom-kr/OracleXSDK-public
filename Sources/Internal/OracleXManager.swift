@@ -27,6 +27,7 @@ class OracleXManager {
         closeOracleX()
         listenerQueue.sync { self.errorListener = nil }
         config = nil
+        pendingCampaignId = nil
         isInitialized = false
         Logger.i("SDK reset completed")
     }
@@ -55,11 +56,14 @@ class OracleXManager {
         return (2000...2999).contains(code) || (3000...3999).contains(code) || (5000...5999).contains(code)
     }
 
-    func openOracleX() {
+    private(set) var pendingCampaignId: String?
+
+    func openOracleX(campaignId: String? = nil) {
         if activeViewController != nil {
             Logger.w("OracleX is already open. Ignoring duplicate open request.")
             return
         }
+        pendingCampaignId = campaignId
         DispatchQueue.main.async {
             guard let topVC = self.topViewController() else {
                 Logger.e("Cannot find top view controller")
@@ -206,7 +210,7 @@ class OracleXManager {
             URLQueryItem(name: "deviceOs",        value: SdkConstants.platform),
             URLQueryItem(name: "deviceOsVersion", value: DeviceInfo.osVersion),
             URLQueryItem(name: "deviceModel",     value: DeviceInfo.model),
-        ]
+        ] + (pendingCampaignId.map { [URLQueryItem(name: "campaignId", value: $0)] } ?? [])
 
         Logger.d("POST params - channelUuid=\(String(config.channelUuid.prefix(6)))***, channelUserId=\(String(config.channelUserId.prefix(3)))***, adid=\(adid), deviceOs=\(SdkConstants.platform), deviceModel=\(DeviceInfo.model)")
 
@@ -227,6 +231,7 @@ class OracleXManager {
             .replacingOccurrences(of: "\"", with: "\\\"")
 
         let adid = config.adid ?? DeviceInfo.idfa
+        let campaignIdEntry = pendingCampaignId.map { ",\n            campaignId: \"\($0)\"" } ?? ""
         return """
         window.OracleXNativeData = {
             channelUserId: "\(escapedUserId)",
@@ -235,7 +240,7 @@ class OracleXManager {
             deviceOs: "\(SdkConstants.platform)",
             deviceOsVersion: "\(DeviceInfo.osVersion)",
             deviceModel: "\(DeviceInfo.model)",
-            adid: "\(adid)"
+            adid: "\(adid)"\(campaignIdEntry)
         };
         """
     }

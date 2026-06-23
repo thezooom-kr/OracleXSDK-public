@@ -53,7 +53,7 @@ public final class OracleXSDK {
         Logger.i("init completed - channelUuid: \(maskedUuid), channelUserId: \(maskedUserId)")
     }
 
-    public func openOracleX() {
+    public func openOracleX(campaignId: String? = nil) {
         guard manager.isInitialized else {
             let error = ErrorCode.sdkNotInitialized.toOracleXError()
             Logger.e(error.message)
@@ -61,7 +61,7 @@ public final class OracleXSDK {
             return
         }
 
-        manager.openOracleX()
+        manager.openOracleX(campaignId: campaignId)
     }
 
     public func setErrorListener(_ listener: @escaping (OracleXError) -> Void) {
